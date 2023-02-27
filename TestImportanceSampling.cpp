@@ -1,11 +1,18 @@
 #include <iostream>
 #include <windows.h>
+#include <random>
 
-/////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////
+
+std::random_device rd;
+std::mt19937 engine(rd());
+
 
 float SimpleRandom()
 {
-  return float(rand() % RAND_MAX) / RAND_MAX;
+  std::uniform_real_distribution<> distr(0.0f, 1.0f);
+  return (float)(distr(engine));
+  //return float(rand() % RAND_MAX) / RAND_MAX;
 }
 
 float MyFunc(float x)
@@ -15,7 +22,9 @@ float MyFunc(float x)
 
 float mutateRnd(const float rnd, const float step)
 {
-  float sign   = (rand() % 2 + 1) % 2 ? 1.0F : -1.0F;
+  std::uniform_int_distribution<> distr(1, 2);
+
+  float sign   = SimpleRandom() >= 0.5f ? 1.0F : -1.0F;
   float offset = rnd + sign*step;
 
   if      (offset > 1.0F) offset = rnd - sign * step;
